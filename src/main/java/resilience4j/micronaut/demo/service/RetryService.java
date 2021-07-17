@@ -44,6 +44,8 @@ public class RetryService {
 
     @Executable
     public String fallback() {
+
+        logger.info("calling from recovery");
         return "Recovered HttpServerErrorException";
     }
 
@@ -54,11 +56,17 @@ public class RetryService {
 
     @Executable
     public Single<String> singleFallback() {
-        return Single.just("Recovered");
+        return Single.fromCallable(() -> {
+            logger.info("calling from recovery");
+            return "Recovered";
+        });
     }
 
     @Executable
     public Flowable<String> flowableFallback() {
-        return Flowable.just("Recovered");
+        return Flowable.fromCallable(() -> {
+            logger.info("calling from recovery");
+            return "Recovered";
+        });
     }
 }
